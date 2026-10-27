@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>我的 AI 问答助手</title>
+    <style>
+        body { font-family: Arial; max-width: 600px; margin: 50px auto; }
+        #chat-box { border: 1px solid #ccc; height: 300px; overflow-y: scroll; padding: 10px; margin-bottom: 10px; }
+        .user-msg { color: blue; text-align: right; margin: 5px; }
+        .bot-msg { color: green; text-align: left; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h2>基于 DeepSeek 的 Web 问答助手</h2>
+    <div id="chat-box"></div>
+    <input type="text" id="user-input" placeholder="输入你的问题..." style="width: 80%; padding: 5px;">
+    <button onclick="sendMessage()" style="padding: 5px 15px;">发送</button>
+
+    <script>
+        async function sendMessage() {
+            const input = document.getElementById('user-input');
+            const chatBox = document.getElementById('chat-box');
+            const message = input.value;
+            if (!message) return;
+
+            // 显示用户消息
+            chatBox.innerHTML += `<div class="user-msg">我: ${message}</div>`;
+            input.value = '';
+
+            // 发送给后端
+            const response = await fetch('/chat', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({message: message})
+            });
+            const data = await response.json();
+
+            // 显示AI回复
+            chatBox.innerHTML += `<div class="bot-msg">AI: ${data.reply}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+</body>
+</html>
