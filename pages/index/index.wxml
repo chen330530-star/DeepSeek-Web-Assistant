@@ -1,0 +1,15 @@
+<view class="container">
+  <!-- 聊天记录显示区 -->
+  <scroll-view class="chat-box" scroll-y="true" scroll-into-view="{{lastMsgId}}">
+    <view wx:for="{{messages}}" wx:key="id" id="msg-{{item.id}}" class="msg-row {{item.role === 'user' ? 'row-user' : 'row-ai'}}">
+      <view class="avatar {{item.role}}">{{item.role === 'user' ? '我' : 'AI'}}</view>
+      <view class="bubble {{item.role}}">{{item.content}}</view>
+    </view>
+  </scroll-view>
+
+  <!-- 底部输入区 -->
+  <view class="input-area">
+    <input class="input-box" value="{{inputValue}}" bindinput="onInput" placeholder="输入你的问题..." confirm-type="send" bindconfirm="sendMessage" />
+    <button class="send-btn" bindtap="sendMessage" loading="{{isLoading}}">发送</button>
+  </view>
+</view>
